@@ -3,12 +3,10 @@ using LinearAlgebra
 #  Uradili Kerim Halilović 19215, Edna Bašić 19187
 
 function rijesi_simplex(A, b, c)
-    # Provjera ulaznih parametara
     if (isnothing(A) || isnothing(b) || isnothing(c) || size(A, 2) != size(c, 2) || size(A, 1) != size(b, 1))
         error("Pogresni ulazni parametri")
     end
 
-    # Inicijalizacija simplex table
     nizBaza = Array{Float64}(b)
     push!(nizBaza, 0)
     simplexTabela = hcat(nizBaza, vcat(A, c))
@@ -17,7 +15,7 @@ function rijesi_simplex(A, b, c)
     varijableX = Array{Float64,1}()
 
     while (true)
-        if (simplex_algoritam(simplexTabela) == -1)
+        if (algoritam(simplexTabela) == -1)
             break
         end
     end
@@ -51,7 +49,7 @@ function rijesi_simplex(A, b, c)
     return Z, varijableX
 end
 
-function simplex_algoritam(simplexTabela)
+function algoritam(simplexTabela)
     maxElementRed = 0
     maxElementKolona = 0
     brojacKolona = 1
@@ -69,8 +67,8 @@ function simplex_algoritam(simplexTabela)
     if (maxElementRed <= 0)
         return -1
     end
-    kolona = kolona + 1
 
+    kolona = kolona + 1
     maxElementKolona = findmax(simplexTabela[1:end-1, kolona])[1]
 
     if (maxElementKolona <= 0)
@@ -80,6 +78,7 @@ function simplex_algoritam(simplexTabela)
     t = 100000000
     t_indeks = 0
     i = 1
+    
     while (i <= size(simplexTabela, 1) - 1)
         if (simplexTabela[i, 1] / simplexTabela[i, kolona] < t && simplexTabela[i, 1] / simplexTabela[i, kolona] >= 0)
             t = simplexTabela[i, 1] / simplexTabela[i, kolona]
