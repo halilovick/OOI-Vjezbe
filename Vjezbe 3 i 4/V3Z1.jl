@@ -1,7 +1,10 @@
 using LinearAlgebra
+
+#  Uradili Kerim Halilović 19215, Edna Bašić 19187
+
 function rijesi_simplex(A, b, c)
     # Provjera ulaznih parametara
-    if (isnothing(A) || isnothing(b) || isnothing(c) || size(A, 1) != size(c, 2) || size(A, 1) != size(b, 1))
+    if (isnothing(A) || isnothing(b) || isnothing(c) || size(A, 2) != size(c, 2) || size(A, 1) != size(b, 1))
         error("Pogresni ulazni parametri")
     end
 
@@ -48,26 +51,28 @@ function rijesi_simplex(A, b, c)
     return Z, varijableX
 end
 
-function simplex_algoritam(simplex)
+function simplex_algoritam(simplexTabela)
     maxElementRed = 0
     maxElementKolona = 0
     brojacKolona = 1
     kolona = 0
     n = 0
 
-    for n in simplex[size(simplex, 1), 2:end]
+    for n in simplexTabela[size(simplexTabela, 1), 2:end]
         if (n > maxElementRed)
             maxElementRed = n
             kolona = brojacKolona
         end
         brojacKolona = brojacKolona + 1
     end
+
     if (maxElementRed <= 0)
         return -1
     end
     kolona = kolona + 1
 
-    maxElementKolona = findmax(simplex[1:end-1, kolona])[1]
+    maxElementKolona = findmax(simplexTabela[1:end-1, kolona])[1]
+
     if (maxElementKolona <= 0)
         return -1
     end
@@ -75,45 +80,71 @@ function simplex_algoritam(simplex)
     t = 100000000
     t_indeks = 0
     i = 1
-    while (i <= size(simplex, 1) - 1)
-        if (simplex[i, 1] / simplex[i, kolona] < t && simplex[i, 1] / simplex[i, kolona] >= 0)
-            t = simplex[i, 1] / simplex[i, kolona]
+    while (i <= size(simplexTabela, 1) - 1)
+        if (simplexTabela[i, 1] / simplexTabela[i, kolona] < t && simplexTabela[i, 1] / simplexTabela[i, kolona] >= 0)
+            t = simplexTabela[i, 1] / simplexTabela[i, kolona]
             t_indeks = i
         end
         i = i + 1
     end
 
-    pivot = simplex[t_indeks, kolona]
+    pivot = simplexTabela[t_indeks, kolona]
 
-    for i in axes(simplex, 1)
+    for i in axes(simplexTabela, 1)
         if (i == t_indeks)
-            for j in axes(simplex, 2)
-                simplex[i, j] = simplex[i, j] * (1 / pivot)
+            for j in axes(simplexTabela, 2)
+                simplexTabela[i, j] = (1 / pivot) * simplexTabela[i, j]
             end
         end
     end
 
-    for i in axes(simplex, 1)
-        el = simplex[i, kolona]
+    for i in axes(simplexTabela, 1)
+        element = simplexTabela[i, kolona]
         if (i != t_indeks)
-            for j in axes(simplex, 2)
-                simplex[i, j] = simplex[i, j] - (el * simplex[t_indeks, j])
+            for j in axes(simplexTabela, 2)
+                simplexTabela[i, j] = simplexTabela[i, j] - (element * simplexTabela[t_indeks, j])
             end
         end
     end
-    
-    return simplex
+
+    return simplexTabela
 end
+
+#  Primjer sa predavanja, strana 38
 
 c = [3 1]
 A = [0.5 0.3; 0.1 0.2]
 b = [150; 60]
-# c = [1000 3000]
-# A = [6 9; 2 1]
-# b = [100; 20]
-optimalnoZ, vrijednostiX = rijesi_simplex(A, b, c);
-println("Optimalna vrijednost funkcije cilja Z: ", optimalnoZ)
+Z, nizX = rijesi_simplex(A, b, c);
+println("Vrijednost funkcije cilja Z: ", Z)
 println("Vrijednosti varijabli x: ")
-for i = 1:size(vrijednostiX, 1)
-    println("x", i, "=", round(vrijednostiX[i]))
+for i in eachindex(nizX)
+    println("x", i, " = ", round(nizX[i]; digits = 2))
 end
+println("")
+
+#  Primjer sa predavanja, strana 39
+
+c = [800 1000]
+A = [30 16; 14 19; 11 26; 0 1]
+b = [22800; 14100; 15950; 550]
+Z, nizX = rijesi_simplex(A, b, c);
+println("Vrijednost funkcije cilja Z: ", Z)
+println("Vrijednosti varijabli x: ")
+for i in eachindex(nizX)
+    println("x", i, " = ", round(nizX[i]; digits = 2))
+end
+println("")
+
+#  Primjer iz zadataka za samostalan rad, strana 4
+
+c = [8 16 29]
+A = [3 8 14; 1 3 5; 1 2 3]
+b = [100; 40; 30;]
+Z, nizX = rijesi_simplex(A, b, c);
+println("Vrijednost funkcije cilja Z: ", Z)
+println("Vrijednosti varijabli x: ")
+for i in eachindex(nizX)
+    println("x", i, " = ", round(nizX[i]; digits = 2))
+end
+println("")
