@@ -2,6 +2,8 @@ using LinearAlgebra
 
 #  Uradili Kerim Halilović 19215, Edna Bašić 19187
 
+# Upada u beskonacnu petlju za iste vrijednosti, testirati nule u tabeli (navodno) (0.8/1b)
+
 function rijesi_simplex(A, b, c)
     if (isnothing(A) || isnothing(b) || isnothing(c) || size(A, 2) != size(c, 2) || size(A, 1) != size(b, 1))
         error("Pogresni ulazni parametri")
