@@ -139,9 +139,9 @@ println("")
 
 #  Primjer iz zadataka za samostalan rad, strana 4
 
-c = [8 16 29]
-A = [3 8 14; 1 3 5; 1 2 3]
-b = [100; 40; 30;]
+c = [51 52 66 92]
+A = [13 20 20 6; 27 27 24 6; 14 7 20 23;]
+b = [4470; 4760; 4820;]
 Z, nizX = rijesi_simplex(A, b, c);
 println("Vrijednost funkcije cilja Z: ", Z)
 println("Vrijednosti varijabli x: ")
