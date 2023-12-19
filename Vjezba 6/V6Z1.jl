@@ -1,5 +1,7 @@
 using LinearAlgebra
 
+#  Uradili Kerim Halilović 19215, Edna Bašić 19187
+
 function nadji_pocetno_SZU(C, I, O)
 	m, n = size(C)
 	sumaI = sum(I)
@@ -45,7 +47,14 @@ function nadji_pocetno_SZU(C, I, O)
 		end
 	end
 
-	Z = sum(A .* C)
+	Z = 0;
+	for i = 1:m
+		for j = 1:n
+			if (A[i, j] != -1)
+				Z += A[i, j] * C[i, j]
+			end
+		end
+	end
 
 	return A, Z
 end
@@ -72,6 +81,15 @@ println("Z = ", Z)
 C = [10 12 0; 8 4 3; 6 9 4; 7 8 5]
 I = [20; 30; 20; 10]
 O = [40; 10; 30]
+
+A, Z = nadji_pocetno_SZU(C, I, O)
+display(A)
+println("Z = ", Z)
+
+# Primjer 4 (nebalansiran)
+C = [2 3 1; 5 4 8; 5 6 8]
+I = [20; 55; 40]
+O = [20; 30; 25]
 
 A, Z = nadji_pocetno_SZU(C, I, O)
 display(A)
