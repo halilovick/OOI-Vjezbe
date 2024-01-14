@@ -52,27 +52,29 @@ function transport(C, S, P)
         iWalker = 1
         jWalker = 1
         
-        check = falses(size(matTransporta, 1) * size(matTransporta, 2))
-
+        check = Array{Bool}(undef,size(matTransporta,1)*size(matTransporta,2))
+        for i in 1:size(matTransporta,1)*size(matTransporta,2)
+            check[i] = false
+        end
         u[1] = 0
-        while any(t -> t == Inf, u) || any(t -> t == Inf, v)
+        while !(count(t -> t == Inf,u) == 0 && count(t -> t == Inf,v) == 0)
  		    count=1;
  		    for i in 1:size(matTransporta,1)
  			    for j in 1:size(matTransporta,2)
-                    if matTransporta[i, j] != 0
-                        if !check[count]
-                            if v[j] != Inf && u[i] == Inf
-                                u[i] = c[i, j] - v[j]
-                                deleteat!(check, count)
-                                insert!(check, count, true)
-                            elseif u[i] == Inf && v[j] != Inf
-                                v[j] = c[i, j] - u[i]
-                                deleteat!(check, count)
-                                insert!(check, count, true)
+ 				    if matTransporta[i,j] !=0
+ 					    if ! check[count]
+ 						    if v[j]!=Inf && u[i] == Inf
+ 	 						    u[i] = c[i,j] - v[j];
+ 	 						    deleteat!(check,count)
+                                insert!(check,count,true)
+                            elseif u[i] != Inf && v[j]==Inf
+ 	 						    v[j] = c[i,j] - u[i];
+ 	 						    deleteat!(check,count)
+                                insert!(check,count,true)
                             end
                         else
-                            deleteat!(check, count)
-                            insert!(check, count, true)
+                            deleteat!(check,count)
+                            insert!(check,count,true)
                         end
                     end
                     count = count + 1
@@ -237,6 +239,19 @@ end
 #primjer iz knjige
 #X = 0 20 0 0 20 0 20 0 30 0 0 0 V = 430
 
+#C = [8 9 4 6; 6 8 5 3; 5 6 7 4;];
+#S = [100 120 140];
+#P = [90 125 80 65];
+#X, V = transport(C, transpose(S), P)
+#for i in 1:size(X, 1)
+#    for j in 1:size(X, 2)
+#        print(X[i, j])
+#        print("  ")
+#    end
+#    println()
+#end
+#println(V)
+
 #primjer sa postavke zadatka
 #X = 0 20 0 0 20 0 20 0 30 0 0 0 V = 430
 #C = [3 2 10; 5 8 12; 4 10 5; 7 15 10];
@@ -253,30 +268,19 @@ end
 #end
 #println(V)
 #primjer zadatka sa samostalnog rada automobili
-#C = [30 28 3 10 25; 27 4 11 2 17; 5 12 1 22 8; 13 21 19 15 23];
-#S = [200 150 250 400];
-#P = [90 170 220 330 190];
-#X, V = transport(C, transpose(S), P)
 
-#for i in 1:size(X, 1)
-#    for j in 1:size(X, 2)
-#        print(X[i, j])
-#        print("  ")
-#    end
-#    println()
-#end
-#println(V)
-
-C=[3 2 10; 5 8 12; 4 10 5; 7 15 10]
-S=[20 50 60 10]
-P=[20 40 30]
-println("aaa");
-X,V=transport(C, transpose(S), P)
+println("1")
+C = [30 28 3 10 25; 27 4 11 2 17; 5 12 1 22 8; 13 21 19 15 23];
+S = [200 150 250 400];
+P = [90 170 220 330 190];
+X, V = transport(C, transpose(S), P)
+println("2")
 for i in 1:size(X, 1)
     for j in 1:size(X, 2)
         print(X[i, j])
         print("  ")
     end
     println()
-    end
+end
 println(V)
+println("3")
